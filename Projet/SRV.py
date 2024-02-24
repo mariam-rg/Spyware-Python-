@@ -25,7 +25,7 @@ def inputServer(valueToPrint):
 def manageClient(clientSocket, address):
     print(f"Accepted connection from {address}")
 
-    IPClient = 1
+    IPClient = address[0]
     while True:
         data = clientSocket.recv(BUFFER_SIZE)
         receiveFile(data)

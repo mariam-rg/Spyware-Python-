@@ -10,11 +10,26 @@ BUFFER_SIZE = 1024
 CLIENT_CONFIG_FILE = "client_config.ini"
 IP_CLIENT = None
 
+COUNT = 1
+
+#array with created keylogger file still existing
+FILE = []
+
 configFile = configparser.ConfigParser()
 
 def writeFile():
-    f = open("myfile.txt", "x")
-    f.close()
+    global COUNT
+    global FILE
+    nameFile = f"{getID()}_{COUNT}.txt"
+    try:
+        with open(nameFile, "w") as f:
+            COUNT += 1
+            FILE.append(nameFile)
+            f.write("TEST")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
 
 
 def setID():
