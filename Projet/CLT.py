@@ -3,10 +3,10 @@ import socket
 import uuid
 import configparser
 import time
-import platform
+
 
 # Server configuration
-SERVER_HOST = '127.0.0.2'  # Change this to the server's IP address
+SERVER_HOST = '127.0.0.1'  
 SERVER_PORT = 12345
 BUFFER_SIZE = 1024
 CLIENT_CONFIG_FILE = "client_config.ini"
@@ -14,7 +14,7 @@ IP_CLIENT = None
 BUFFER_SIZE = 1024
 COUNT = 1
 
-#array with created keylogger file still existing
+
 FILE = []
 
 configFile = configparser.ConfigParser()
@@ -22,7 +22,7 @@ configFile = configparser.ConfigParser()
 
  #Obtenir le nom du os
 def get_os():
-    return platform.system()
+    return os.system()
 
 #Récupérer l'adresse IP du client
 def getIP():

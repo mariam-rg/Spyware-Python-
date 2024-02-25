@@ -16,10 +16,11 @@ SERVER_PORT = 55556
 BUFFER_SIZE = 1024
 
 
-#Dictionary to store client IDs and connections
+
+#Dictionnaire pour enregitrer l'id et les connections des clients 
 CLIENT_FILE_DAY = {}
 
-#Array with all open ports
+#Array avec tout les ports ouvert
 PORTS = []
 
 
