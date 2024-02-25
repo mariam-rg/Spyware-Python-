@@ -26,7 +26,15 @@ def get_os():
 
 
 def getIP():
-    pass
+    try:
+        # Créer un socket et se connecter à une adresse quelconque (ici, Google DNS)
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(("8.8.8.8", 80))
+            ip_address = s.getsockname()[0]
+        return ip_address
+    except socket.error as e:
+        print(f"Erreur lors de la récupération de l'adresse IP : {e}")
+        return None
 
 
 
@@ -125,6 +133,12 @@ def main():
     
     os_name = get_os()
     print(f"Système d'exploitation : {os_name}")
+
+    client_ip = getIP()
+    if client_ip:
+        print(f"L'adresse IP du client est : {client_ip}")
+    else:
+        print("Impossible de récupérer l'adresse IP.")
 
     #Close the connection
     #client_socket.close()

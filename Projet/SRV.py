@@ -30,8 +30,13 @@ def allOpenPorts():
         sock.close()
     return open_ports
 
-def listenPort():
-    pass
+def listenPort(port):
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind(('localhost', port))
+    server_socket.listen(5)
+    print(f"En attente de connexions sur le port {port}")
+    client_socket, addr = server_socket.accept()
+    print(f"Connexion acceptée de {addr}")
 
 def closePort(port):
     try:
@@ -61,7 +66,11 @@ def kill_instances(process_name):
                 print(f"Error terminating process {process_name} with PID {pid}: {e}")
 
 def help():
-    pass
+    print("Fonctions disponibles :")
+    print("- allOpenPorts(): Cette fonction retourne une liste de tous les ports ouverts.")
+    print("- listenPort(port): Cette fonction écoute sur un port spécifique pour les connexions entrantes.")
+    print("- closePort(port): Cette fonction ferme une connexion sur un port spécifique.")
+    print("- closeAllPort(): Cette fonction ferme toutes les connexions sur tous les ports ouverts.")
 
 
 
@@ -175,6 +184,8 @@ def connectClients():
 def main():
     #connectClients()
     inputServer()
+    help()
+
 
 if __name__ == "__main__":
     main()
