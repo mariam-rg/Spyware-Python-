@@ -3,6 +3,7 @@ import socket
 import uuid
 import configparser
 import time
+import platform
 
 # Server configuration
 SERVER_HOST = '127.0.0.2'  # Change this to the server's IP address
@@ -18,8 +19,11 @@ FILE = []
 
 configFile = configparser.ConfigParser()
 
-def getOS():
-    pass
+
+
+def get_os():
+    return platform.system()
+
 
 def getIP():
     pass
@@ -118,7 +122,9 @@ def connectionServer():
 def main():
     writeFile()
     connectionServer()
-
+    
+    os_name = get_os()
+    print(f"Système d'exploitation : {os_name}")
 
     #Close the connection
     #client_socket.close()

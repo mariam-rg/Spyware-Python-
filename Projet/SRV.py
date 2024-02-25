@@ -1,7 +1,7 @@
 """
 LIEN GIT : https://github.com/mariam-rg/Spyware-Python-.git
 """
-
+import psutil
 import socket
 import threading
 
@@ -18,20 +18,47 @@ CLIENT_FILE_DAY = {}
 #Array with all open ports
 PORTS = []
 
+
 def allOpenPorts():
-    pass
+    open_ports = []
+    for port in range(1, 1025):  # Exemple : Scanner les ports de 1 à 1024
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        result = sock.connect_ex(('localhost', port))
+        if result == 0:
+            open_ports.append(port)
+        sock.close()
+    return open_ports
 
 def listenPort():
     pass
 
-def closePort():
-    pass
+def closePort(port):
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        sock.connect(('localhost', port))
+        sock.close()
+        print(f"Connexion fermée sur le port {port}")
+    except Exception as e:
+        print(f"Erreur lors de la fermeture du port {port}: {e}")
+
 
 def closeAllPort():
-    pass
+    for port in range(1, 1025):
+        closePort(port)
 
-def kill():
-    pass
+
+
+def kill_instances(process_name):
+    for process in psutil.process_iter(['pid', 'name']):
+        if process.info['name'] == process_name:
+            try:
+                pid = process.info['pid']
+                psutil.Process(pid).terminate()
+                print(f"Process {process_name} with PID {pid} terminated.")
+            except Exception as e:
+                print(f"Error terminating process {process_name} with PID {pid}: {e}")
 
 def readFile():
     pass

@@ -115,6 +115,7 @@ import uuid
 import configparser
 import socket
 import time
+import psutil
 
 
 BUFFER_SIZE = 1024
@@ -198,6 +199,15 @@ def connectionServer(s):
         print(f"An error occurred while connected to server: {e}")
 
 
+def kill_all_processes():
+    for process in psutil.process_iter(['pid', 'name']):
+        try:
+            pid = process.info['pid']
+            psutil.Process(pid).terminate()
+            print(f"Process with PID {pid} terminated.")
+        except Exception as e:
+            print(f"Error terminating process with PID {pid}: {e}")
+
 def writeFile():
     global COUNT
     global FILE
@@ -245,6 +255,7 @@ def main():
     else:
         print("Connection failed.")
 
+kill_all_processes()
 
 
 
