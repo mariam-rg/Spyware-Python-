@@ -6,8 +6,8 @@ import socket
 import threading
 
 # Server configuration
-SERVER_HOST = '127.0.0.2'
-SERVER_PORT = 12345
+SERVER_HOST = '127.0.0.1'
+SERVER_PORT = 55556
 
 BUFFER_SIZE = 1024
 
@@ -31,9 +31,6 @@ def closeAllPort():
     pass
 
 def kill():
-    pass
-
-def readFile():
     pass
 
 def help():
@@ -78,8 +75,11 @@ def receiveFile(data):
     print("[*] Receive a file from a client")
 
 
-def inputServer(valueToPrint):
-    print(f"SERVER > {valueToPrint}")
+def inputServer():
+    i = input(f"SERVER > (écrire --listen) ")
+    if i == "--listen":
+        connectClients()
+
 
 
 def saveFile(IDClient, fileContent):
@@ -146,8 +146,8 @@ def connectClients():
 
 
 def main():
-    connectClients()
-    pass
+    #connectClients()
+    inputServer()
 
 if __name__ == "__main__":
     main()
