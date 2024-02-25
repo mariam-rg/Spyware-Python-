@@ -116,12 +116,11 @@ def manageClient(clientSocket, address):
                 break
 
             nameFile, fileContent = data.split(b"\n", 1)
-            nameFile = nameFile.decode()
-            addFileDirectory(IDClient, nameFile)
+            addFileDirectory(IDClient, nameFile.decode())
             displayAllFileDay()
             
             saveFile(IDClient, fileContent)
-            clientSocket.sendall(b"File '" + nameFile + "' received") 
+            clientSocket.sendall(b"File '" + nameFile + b"' received") 
     except ConnectionResetError:
         print(f"[*] Connection from {IPClient} ({address}) closed unexpectedly.")
     except Exception as e:
