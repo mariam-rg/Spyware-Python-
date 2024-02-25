@@ -47,6 +47,7 @@ def writeFile():
             COUNT += 1
             FILE.append(nameFile)
             f.write(b"TEST")
+            return nameFile
     except Exception as e:
         print(f"An error occurred during writing file: {e}")
 
